@@ -1,37 +1,55 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     fetch('/api/register')
       .then(res => res.json())
       .then(data => setUsers(data))
-      .catch(console.error)
-  }, [])
+      .catch(console.error);
+  }, []);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Bot Kullanıcıları</h1>
+    <div className="min-h-screen bg-white text-gray-800 px-4 py-8">
+      <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">
+        Bot Kullanıcıları
+      </h1>
+
       {users.length === 0 ? (
-        <p>Henüz kullanıcı yok.</p>
+        <p className="text-center text-gray-500">Henüz kullanıcı yok.</p>
       ) : (
-        users.map(user => (
-          <div key={user.id} style={{ marginBottom: 20, padding: 10, border: '1px solid #ccc' }}>
-            <h2>{user.username}</h2>
-            {user.avatar && (
-              <img
-                src={user.avatar}
-                alt="Avatar"
-                width={50}
-                style={{ borderRadius: '50%' }}
-              />
-            )}
-            <p><strong>Bio:</strong> {user.bio || "—"}</p>
-            <p><strong>Hikaye Sayısı:</strong> {user.stories?.length || 0}</p>
-          </div>
-        ))
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {users.map((user) => (
+            <div
+              key={user.id}
+              className="bg-blue-50 border border-blue-200 rounded-xl p-4 shadow-sm hover:shadow-md transition"
+            >
+              <div className="flex items-center space-x-4">
+                {user.avatar && (
+                  <img
+                    src={user.avatar}
+                    alt="Avatar"
+                    className="w-16 h-16 rounded-full border border-blue-300"
+                  />
+                )}
+                <div>
+                  <h2 className="text-xl font-semibold text-blue-700">
+                    {user.username}
+                  </h2>
+                  <p className="text-sm text-gray-600 italic">
+                    {user.bio || 'Bio yok.'}
+                  </p>
+                </div>
+              </div>
+              <p className="mt-4 text-sm text-gray-700">
+                📸 Hikaye sayısı:{' '}
+                <strong>{user.stories?.length || 0}</strong>
+              </p>
+            </div>
+          ))}
+        </div>
       )}
     </div>
-  )
+  );
 }
