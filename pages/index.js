@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({});
 
   useEffect(() => {
     fetch('/api/register')
@@ -11,19 +11,28 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 px-4 py-8">
-      <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">
-        Bot Kullanıcıları
-      </h1>
-
-      {users.length === 0 ? (
-        <p className="text-center text-gray-500">Henüz kullanıcı yok.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {users.map((user) => (
-            <div
-              key={user.id}
-              className="bg-blue-50 border border-blue-200 rounded-xl p-4 shadow-sm hover:shadow-md transition"
+    <div className="min-h-screen bg-white text-gray-800 p-4">
+      <h1 className="text-3xl font-bold mb-6 text-blue-600">📋 Bot Kullanıcıları</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {Object.keys(users).length === 0 && <p>Henüz kullanıcı yok.</p>}
+        {Object.entries(users).map(([id, user]) => (
+          <div key={id} className="bg-blue-50 border border-blue-200 rounded p-4 shadow">
+            <h2 className="text-xl font-semibold">{user.username}</h2>
+            {user.avatar && (
+              <img
+                src={user.avatar}
+                alt="Avatar"
+                className="w-16 h-16 rounded-full mt-2"
+              />
+            )}
+            <p className="mt-2 text-sm text-gray-600">Bio: {user.bio || "Yok"}</p>
+            <p className="text-sm text-gray-600">Hikaye sayısı: {user.stories.length}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}ow-md transition"
             >
               <div className="flex items-center space-x-4">
                 {user.avatar && (
